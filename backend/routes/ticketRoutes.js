@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.get('/', getTickets);
 router.post('/buy', authMiddleware, buyTicket);
-router.post('/create/:id', isAdmin, createTicket);
+router.post('/create', isAdmin, createTicket);
 
 module.exports = router;
