@@ -1,0 +1,21 @@
+{{!-- views/cadastro.hbs --}}
+{{#> layout}}
+    <h2>Cadastro</h2>
+    <form action="/api/auth/register" method="POST">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Senha:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="confirmPassword">Confirme a Senha:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <p>Já tem uma conta? <a href="/login">Faça login</a></p>
+{{/layout}}
