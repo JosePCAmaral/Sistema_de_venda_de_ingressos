@@ -45,14 +45,14 @@ app.get('/register', (req, res) => {
 });
 
 // 🔹 Página de Histórico de Compras (dados do banco)
-app.get('/historico/:userId', async (req, res) => {
+app.get('/historical/:userId', async (req, res) => {
     try {
         const user = await User.findById(req.params.userId);
         if (!user) return res.status(404).send('Usuário não encontrado');
 
         const compras = await Purchase.find({ userId: user._id }).populate('ticketId');
 
-        res.render('historico', { user, compras });
+        res.render('historical', { user, compras });
     } catch (error) {
         console.error(error);
         res.status(500).send('Erro ao buscar histórico de compras');
