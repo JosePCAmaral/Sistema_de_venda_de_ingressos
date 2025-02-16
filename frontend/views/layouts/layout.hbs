@@ -5,25 +5,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/register.css">
+    <link rel="stylesheet" href="/css/home.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="/">Início</a></li>
-                <li><a href="/historico">Histórico de Compras</a></li>
-                <li><a href="/login">Login</a></li>
-            </ul>
-        </nav>
-    </header>
+    {{#unless hideHeader}}
+
+            <header>
+                <nav>
+                    <ul class="layout">
+                        <li><a href="/historical">📜 Meu Histórico de Compras</a></li>
+                        <li><a href="/home">HOME</a></li>
+                        <li><a href="/tickets">🎟️ Ingressos Disponíveis</a></li>
+                    </ul>
+                </nav>
+            </header>
+            
+    {{/unless}}
+
     
     <main>
         {{{body}}}
     </main>
     
     <footer>
-        <p>&copy; 2025 Sistema de Ingressos</p>
+        <div>
+            <p>&copy; 2025 Sistema de Ingressos - José Pedro Cunha do Amaral</p>
+        </div>
     </footer>
 </body>
 </html>

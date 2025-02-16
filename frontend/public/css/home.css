@@ -1,0 +1,82 @@
+.homeContainer {
+    padding-top: 10%;
+    width: 90%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div.homeComum {
+    background-color: #1E3A8A;
+    border-radius: 15px;
+    padding: 20px;
+    width: 80%;
+    max-width: 900px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+div.lista {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.section-baratos,
+.section-pouca-qtd {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    flex: 1;
+    text-align: center;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+h3 {
+    color: #1E3A8A;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* Estilo das listas */
+.lista-baratos,
+.lista-pouca-qtd {
+    list-style: none;
+    padding: 0;
+}
+
+/* Estilo dos itens da lista */
+.item-barato,
+.item-pouca-qtd {
+    background-color: #E5E7EB;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.item-barato:hover,
+.item-pouca-qtd:hover {
+    transform: scale(1.05);
+    background-color: #D1D5DB;
+}
+
+a {
+    text-decoration: none;
+    color: #1E3A8A;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.phomecomun{
+    color: white;
+}

@@ -24,20 +24,36 @@ exports.getTickets = async (req, res) => {
     }
 };
 
+exports.getHomeData = async (req, res) => {
+    try {
+        const ingressosBaratos = await Ticket.find().sort({ price: 1 }).limit(3);
+        const ingressosPoucaQtd = await Ticket.find().sort({ quantity: 1 }).limit(3);
+
+        res.json({ ingressosBaratos, ingressosPoucaQtd });
+    } catch (error) {
+        console.error("Erro ao buscar ingressos:", error);
+        res.status(500).json({ message: "Erro ao carregar os ingressos." });
+    }
+};
+
 exports.buyTicket = async (req, res) => {
     const session = await mongoose.startSession();
-
     try {
         session.startTransaction();
 
         const { ticketId, quantity } = req.body;
         const userId = req.user.id;
 
+        if (!quantity || quantity < 1) {
+            return res.status(400).json({ message: "Quantidade inválida" });
+        }
+
         const ticket = await Ticket.findById(ticketId).session(session);
-        if (!ticket) return res.status(404).json({ message: "Ingresso não encontrado" });
+        if (!ticket) {
+            return res.status(404).json({ message: "Ingresso não encontrado" });
+        }
 
         if (ticket.quantity < quantity) {
-            await session.abortTransaction();
             return res.status(400).json({ message: "Estoque insuficiente" });
         }
 
@@ -45,8 +61,11 @@ exports.buyTicket = async (req, res) => {
 
         const purchase = new Purchase({
             userId,
-            purchaseId: new mongoose.Types.ObjectId(),
-            items: [{ ticketId, quantity }],
+            items: [{ 
+                ticketId, 
+                quantity, 
+                priceAtPurchase: ticket.price 
+            }],
             totalPrice
         });
 
@@ -55,13 +74,16 @@ exports.buyTicket = async (req, res) => {
         await ticket.save({ session });
 
         await session.commitTransaction();
-        session.endSession();
-
-        res.json({ message: "Compra realizada com sucesso", purchase });
+        
+        res.json({
+            message: "Compra realizada com sucesso",
+            purchase
+        });
     } catch (error) {
+        console.error("Erro na compra de ingresso:", error);
         await session.abortTransaction();
+        res.status(500).json({ message: "Erro ao comprar ingresso", error: error.message || error });
+    } finally {
         session.endSession();
-        res.status(500).json({ message: "Erro ao comprar ingresso", error });
     }
 };
-

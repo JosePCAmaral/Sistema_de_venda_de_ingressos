@@ -5,19 +5,31 @@ const User = require('../models/User');
 // Cadastro de usuário
 exports.register = async (req, res) => {
     try {
+        console.log("Recebendo requisição de cadastro:", req.body); // <-- Log para debug
+
         const { name, email, password } = req.body;
+        if (!name || !email || !password) {
+            return res.status(400).json({ message: "Todos os campos são obrigatórios." });
+        }
+
         let user = await User.findOne({ email });
-        if (user) return res.status(400).json({ message: "Usuário já existe" });
+        if (user) {
+            return res.status(400).json({ message: "Usuário já existe" });
+        }
 
         const hashedPassword = await bcrypt.hash(password, 10);
         user = new User({ name, email, password: hashedPassword, isAdm: false });
+
         await user.save();
+        console.log("Usuário cadastrado com sucesso:", user); // <-- Log para debug
 
         res.status(201).json({ message: "Usuário cadastrado com sucesso" });
     } catch (error) {
+        console.error("Erro ao cadastrar usuário:", error); // <-- Log do erro
         res.status(500).json({ message: "Erro no servidor" });
     }
 };
+
 
 exports.registerAdm = async (req, res) => {
     try {
@@ -40,14 +52,32 @@ exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ message: 'Usuário não encontrado' });
+
+        if (!user) {
+            return res.status(400).json({ message: "Usuário não encontrado" });
+        }
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ message: 'Credenciais inválidas' });
+        if (!isMatch) {
+            return res.status(400).json({ message: "Credenciais inválidas" });
+        }
 
-        const token = jwt.sign({ id: user._id, isAdmin: user.isAdm }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token });
+        if (!process.env.JWT_SECRET) {
+            console.error("Erro: JWT_SECRET não está definido no .env");
+            return res.status(500).json({ message: "Erro interno no servidor" });
+        }
+
+        const token = jwt.sign(
+            { id: user._id, isAdm: user.isAdm }, // Mantendo "isAdm" igual ao model
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
+        );
+
+        res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "strict" });
+
+        res.json({ message: "Login bem-sucedido!", token: token});
     } catch (error) {
-        res.status(500).json({ message: 'Erro no servidor' });
+        console.error(error);
+        res.status(500).json({ message: "Erro no servidor" });
     }
 };

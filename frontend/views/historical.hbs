@@ -1,33 +1,16 @@
-{{!-- views/historico.hbs --}}
-<div class="container">
-    <h2>Histórico de Compras</h2>
+<h2>Histórico de Compras</h2>
 
-    {{#if compras.length}}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tipo de Ingresso</th>
-                    <th>Preço</th>
-                    <th>Data da Compra</th>
-                    <th>Detalhes</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each compras}}
-                <tr>
-                    <td>{{id}}</td>
-                    <td>{{tipo}}</td>
-                    <td>R$ {{preco}}</td>
-                    <td>{{data}}</td>
-                    <td>
-                        <a class="btn" href="/ingresso/{{id}}">Ver Ingresso</a>
-                    </td>
-                </tr>
+<div>
+    {{#each purchases}}
+        <div class="purchase">
+            <h3>Compra {{this.purchaseId}}</h3>
+            <p>Data: {{this.purchaseDate}}</p>
+            <ul>
+                {{#each this.items}}
+                    <li>Ingresso: {{this.ticketId.name}} - Quantidade: {{this.quantity}} - Preço: R$ {{this.priceAtPurchase}}</li>
                 {{/each}}
-            </tbody>
-        </table>
-    {{else}}
-        <p class="empty">Você ainda não comprou nenhum ingresso.</p>
-    {{/if}}
+            </ul>
+            <p>Total da compra: R$ {{this.totalAmount}}</p>
+        </div>
+    {{/each}}
 </div>

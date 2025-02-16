@@ -1,21 +1,24 @@
 {{!-- views/cadastro.hbs --}}
 {{#> layout}}
+<div class="container">
     <h2>Cadastro</h2>
-    <form action="/api/auth/register" method="POST">
+    <form action="/api/auth/register" method="POST" class="register-form">
         <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" required>
+        <input type="text" id="name" name="name" required placeholder="Digite seu nome">
 
         <label for="email">E-mail:</label>
-        <input type="email" id="email" name="email" required>
+        <input type="email" id="email" name="email" required placeholder="Digite seu e-mail">
 
         <label for="password">Senha:</label>
-        <input type="password" id="password" name="password" required>
+        <input type="password" id="password" name="password" required placeholder="Digite sua senha">
 
         <label for="confirmPassword">Confirme a Senha:</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" required>
+        <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirme sua senha">
 
-        <button type="submit">Cadastrar</button>
+        <button type="submit" class="btn">Cadastrar</button>
     </form>
 
-    <p>Já tem uma conta? <a href="/login">Faça login</a></p>
+    <p class="link">Já tem uma conta? <a href="/login">Faça login</a></p>
+</div>
+    <script src="/script/register.js"></script>
 {{/layout}}

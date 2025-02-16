@@ -1,0 +1,17 @@
+{{#> layout}}
+<h2>Comprar Ingresso</h2>
+<div class="ticket-container">
+    <h3>{{ticket.name}}</h3>
+    <p>Preço: R$ <span id="ticket-price">{{ticket.price}}</span></p>
+    <p>Quantidade disponível: {{ticket.quantity}}</p>
+
+    <label for="quantity">Quantidade:</label>
+    <input type="number" id="quantity" min="1" max="{{ticket.quantity}}" value="1">
+    
+    <p>Total: R$ <span id="total-price">{{ticket.price}}</span></p>
+
+    <button id="buy-button">Comprar</button>
+</div>
+
+<script src="/script/buyTicket.js"></script>
+{{/layout}}
