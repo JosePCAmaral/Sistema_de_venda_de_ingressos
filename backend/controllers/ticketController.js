@@ -14,6 +14,47 @@ exports.createTicket = async (req, res) => {
     }
 };
 
+// Atualizar um ingresso (somente admin)
+exports.updateTicket = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, price, quantity } = req.body;
+
+        const updatedTicket = await Ticket.findByIdAndUpdate(
+            id,
+            { name, price, quantity },
+            { new: true }
+        );
+
+        if (!updatedTicket) {
+            return res.status(404).json({ message: "Ingresso não encontrado" });
+        }
+
+        res.json({ message: "Ingresso atualizado com sucesso", ticket: updatedTicket });
+    } catch (error) {
+        console.error("Erro ao atualizar ingresso:", error);
+        res.status(500).json({ message: "Erro ao atualizar ingresso" });
+    }
+};
+
+// Deletar um ingresso (somente admin)
+exports.deleteTicket = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const deletedTicket = await Ticket.findByIdAndDelete(id);
+
+        if (!deletedTicket) {
+            return res.status(404).json({ message: "Ingresso não encontrado" });
+        }
+
+        res.json({ message: "Ingresso deletado com sucesso" });
+    } catch (error) {
+        console.error("Erro ao deletar ingresso:", error);
+        res.status(500).json({ message: "Erro ao deletar ingresso" });
+    }
+};
+
 // Listar ingressos
 exports.getTickets = async (req, res) => {
     try {

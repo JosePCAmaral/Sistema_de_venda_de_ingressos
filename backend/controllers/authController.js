@@ -47,6 +47,53 @@ exports.registerAdm = async (req, res) => {
     }
 };
 
+// Atualizar usuário
+exports.updateUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, password } = req.body;
+        const { user } = req; // Obtendo usuário autenticado do middleware
+
+        if (user.id !== id && !user.isAdm) {
+            return res.status(403).json({ message: "Sem permissão para editar este usuário" });
+        }
+
+        const updateData = {};
+        if (name) updateData.name = name;
+        if (password) updateData.password = await bcrypt.hash(password, 10);
+
+        const updatedUser = await User.findByIdAndUpdate(id, updateData, { new: true });
+
+        if (!updatedUser) return res.status(404).json({ message: "Usuário não encontrado" });
+
+        res.json({ message: "Usuário atualizado com sucesso", user: updatedUser });
+    } catch (error) {
+        console.error("Erro ao atualizar usuário:", error);
+        res.status(500).json({ message: "Erro no servidor" });
+    }
+};
+
+// Excluir usuário
+exports.deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { user } = req; // Obtendo usuário autenticado do middleware
+
+        if (user.id !== id && !user.isAdm) {
+            return res.status(403).json({ message: "Sem permissão para excluir este usuário" });
+        }
+
+        const deletedUser = await User.findByIdAndDelete(id);
+
+        if (!deletedUser) return res.status(404).json({ message: "Usuário não encontrado" });
+
+        res.json({ message: "Usuário excluído com sucesso" });
+    } catch (error) {
+        console.error("Erro ao excluir usuário:", error);
+        res.status(500).json({ message: "Erro no servidor" });
+    }
+};
+
 // Login de usuário
 exports.login = async (req, res) => {
     try {
